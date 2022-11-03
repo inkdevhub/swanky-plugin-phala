@@ -1,25 +1,25 @@
 import { Command, Flags } from "@oclif/core";
 import path = require("node:path");
 import * as fs from 'fs-extra';
-import { getTemplates } from "../../../lib/template";
-import { ensureSwankyProject } from "../../../lib/config";
-import { email, name, pickTemplate } from "../../../lib/prompts";
-import { Spinner } from "../../../lib/spinner";
 import {
+  ensureSwankyProject,
+  email, name, pickTemplate,
+  Spinner,
   checkCliDependencies,
   copyContractTemplateFiles,
   processTemplates,
-} from "../../../lib/tasks";
+} from "@astar-network/swanky-core";
 import { paramCase, pascalCase, snakeCase } from "change-case";
 import execa = require("execa");
 import inquirer = require("inquirer");
+import { getTemplates } from "../init";
 
 export class NewContract extends Command {
   static description = "Generate a new smart contract template inside a project";
 
   static flags = {
     template: Flags.string({
-      options: getTemplates(path.resolve(__dirname, "../../..", "templates"), "pink").contractTemplatesList.map((template) => template.value),
+      options: getTemplates().contractTemplatesList.map((template) => template.value),
     }),
     verbose: Flags.boolean({ char: "v" }),
   }
@@ -42,7 +42,7 @@ export class NewContract extends Command {
       throw Error(`Contract folder '${args.contractName}' already exists`);
     }
 
-    const templates = getTemplates(path.resolve(__dirname, "../../..", "templates"), "pink");
+    const templates = getTemplates();
 
     const questions = [
       pickTemplate(templates.contractTemplatesList),

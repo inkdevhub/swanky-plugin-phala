@@ -3,14 +3,16 @@ import path = require("node:path");
 import { CodePromise, Abi } from "@polkadot/api-contract";
 import { readJSON, readFile, writeJSON } from "fs-extra";
 import { cryptoWaitReady } from "@polkadot/util-crypto";
-import { ChainApi } from "../../../lib/substrate-api";
-import { KeyringPair } from "@polkadot/keyring/types";
-import { resolveNetworkUrl,} from "../../../lib/network";
-import { getSwankyConfig, ensureSwankyProject } from "../../../lib/config";
-import { ChainAccount } from "../../../lib/account";
-import { Spinner } from "../../../lib/spinner";
+import { KeyringPair } from "@polkadot/keyring/types"
+import {
+  ChainApi,
+  resolveNetworkUrl,
+  getSwankyConfig, ensureSwankyProject,
+  ChainAccount,
+  Spinner,
+  decrypt, Encrypted
+} from "@astar-network/swanky-core";
 import inquirer from "inquirer";
-import { decrypt, Encrypted } from "../../../lib/crypto";
 import chalk = require("chalk");
 import { ApiPromise } from "@polkadot/api";
 import {khalaDev} from '@phala/typedefs'

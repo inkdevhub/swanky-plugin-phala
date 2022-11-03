@@ -7,19 +7,17 @@ import {
   downloadNode,
   installDeps,
   processTemplates,
-} from "../../../lib/tasks";
+  choice, email, name, pickTemplate,
+  Spinner,
+  ChainAccount,
+  SwankyConfig,
+  DEFAULT_NETWORK_URL,
+  NodeInfo
+} from "@astar-network/swanky-core";
 import execa = require("execa");
 import { paramCase, pascalCase, snakeCase } from "change-case";
 import inquirer = require("inquirer");
-import { choice, email, name, pickTemplate } from "../../../lib/prompts";
-import { Spinner } from "../../../lib/spinner";
-import { ChainAccount } from "../../../lib/account";
-import { SwankyConfig } from "../../../lib/config";
-import {
-  DEFAULT_LOCAL_NETWORK_URL,
-} from "../../../lib/network";
-import { getTemplates } from "../../../lib/template";
-import { NodeInfo } from "../../../lib/nodeInfo";
+import { readdirSync } from "node:fs";
 
 export const phalaNode: NodeInfo = {
   name: "phala-node",
@@ -32,6 +30,22 @@ export const phalaNode: NodeInfo = {
     darwin:
       "https://github.com/Phala-Network/phala-blockchain/releases/download/poc2-3.0-alpha1/phala-node",
   },
+}
+
+export function getTemplates(language = "pink") {
+  const templatesPath = path.resolve(__dirname, "../../..", "templates");
+  const contractTemplatesPath = path.resolve(templatesPath, "contracts", language);
+  const fileList = readdirSync(contractTemplatesPath, {
+    withFileTypes: true,
+  });
+  const contractTemplatesList = fileList
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => ({
+      message: entry.name,
+      value: entry.name,
+    }));
+
+  return { templatesPath, contractTemplatesPath, contractTemplatesList };
 }
 
 export const phalaComponents = {
@@ -53,7 +67,7 @@ export class Init extends Command {
   static flags = {
     "phala-node": Flags.boolean(),
     template: Flags.string({
-      options: getTemplates(path.resolve(__dirname, "../../..", "templates"), "pink").contractTemplatesList.map((template) => template.value),
+      options: getTemplates().contractTemplatesList.map((template) => template.value),
     }),
     verbose: Flags.boolean({ char: "v" }),
   };
@@ -70,7 +84,7 @@ export class Init extends Command {
     const { args, flags } = await this.parse(Init);
 
     const projectPath = path.resolve(args.projectName);
-    const templates = getTemplates(path.resolve(__dirname, "../../..", "templates"), "pink");
+    const templates = getTemplates();
 
     const questions = [
       pickTemplate(templates.contractTemplatesList),
@@ -155,7 +169,7 @@ export class Init extends Command {
         },
       ],
       networks: {
-        local: { url: DEFAULT_LOCAL_NETWORK_URL },
+        local: { url: DEFAULT_NETWORK_URL },
       },
       contracts: [],
     };
