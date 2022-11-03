@@ -22,6 +22,8 @@
     "@oclif/plugin-not-found": "^2.3.5",
     "@oclif/plugin-plugins": "^2.1.4",
     "@oclif/plugin-version": "^1.1.1",
+    "@phala/sdk": "^0.3.4-beta.0",
+    "@phala/typedefs": "^0.2.32",
     "@polkadot/api": "^9.0.1",
     "@polkadot/api-contract": "^9.0.1",
     "@polkadot/keyring": "^10.1.2",
