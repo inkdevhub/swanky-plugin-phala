@@ -1,6 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import path = require("node:path");
-import { writeJSON } from "fs-extra";
+import { writeJSON, ensureDir, remove } from "fs-extra";
 import {
   checkCliDependencies,
   copyTemplateFiles,
@@ -18,18 +18,56 @@ import execa = require("execa");
 import { paramCase, pascalCase, snakeCase } from "change-case";
 import inquirer = require("inquirer");
 import { readdirSync } from "node:fs";
+import { DownloadEndedStats, DownloaderHelper } from "node-downloader-helper";
+import decompress from "decompress";
 
-export const phalaNode: NodeInfo = {
+const phalaNode: NodeInfo = {
   name: "phala-node",
   version: "3.0.0",
   polkadotPalletVersions: "polkadot-v0.9.30",
   supportedInk: "v3.3.1",
   downloadUrl: {
     linux:
-      "https://github.com/Phala-Network/phala-blockchain/releases/download/poc2-3.0-alpha1/phala-node",
+      "https://github.com/AstarNetwork/swanky-plugin-phala/releases/download/for-artifacts/phala-node.tar.gz",
     darwin:
-      "https://github.com/Phala-Network/phala-blockchain/releases/download/poc2-3.0-alpha1/phala-node",
+      "https://github.com/AstarNetwork/swanky-plugin-phala/releases/download/for-artifacts/phala-node.tar.gz",
   },
+}
+
+const downloadUrls = {
+  "pherry": {
+    "linux": "https://github.com/AstarNetwork/swanky-plugin-phala/releases/download/for-artifacts/pherry.tar.gz",
+  },
+  "pruntime": {
+    "linux": "https://github.com/AstarNetwork/swanky-plugin-phala/releases/download/for-artifacts/pruntime.tar.gz",
+  }
+}
+
+async function downlaodBinaryFile(projectPath: string, url: string, spinner: Spinner) {
+  const binFolderPath = path.resolve(projectPath, "bin");
+  await ensureDir(binFolderPath);
+
+  const compressedFileDetails = await new Promise<DownloadEndedStats>((resolve, reject) => {
+    const dl = new DownloaderHelper(url, binFolderPath);
+  
+    dl.on("progress", (event) => {
+      spinner.text(`Downloading ${event.progress}%`);
+    });
+    dl.on("end", (event) => {
+      resolve(event);
+    });
+    dl.on("error", (error) => {
+      reject(new Error(`Error downloading: , ${error.message}`));
+    });
+  
+    dl.start().catch((error) => reject(new Error(`Error downloading: , ${error.message}`)));
+  });
+
+  const compressedFilePath = path.resolve(binFolderPath, compressedFileDetails.filePath);
+  const decompressed = await decompress(compressedFilePath, binFolderPath);
+  const binPath = path.resolve(binFolderPath, decompressed[0].path);
+  await remove(compressedFilePath);
+  await execa.command(`chmod +x ${binPath}`);
 }
 
 export function getTemplates(language = "pink") {
@@ -46,19 +84,6 @@ export function getTemplates(language = "pink") {
     }));
 
   return { templatesPath, contractTemplatesPath, contractTemplatesList };
-}
-
-export const phalaComponents = {
-  pRuntime: {
-    downloadUrl: {
-      linux: ""
-    }
-  },
-  pherry: {
-    downloadUrl: {
-      linux: ""
-    }
-  }
 }
 
 export class Init extends Command {
@@ -143,9 +168,25 @@ export class Init extends Command {
         "Downloading Phala node"
       )) as string;
       nodePath = taskResult;
+
+      // download phala components
+      const pherryDlUrl = downloadUrls.pherry[process.platform];
+      if (!pherryDlUrl)
+        throw new Error(`Could not download pherry. Platform ${process.platform} not supported!`);
+      const pRuntimeDlUrl = downloadUrls.pruntime[process.platform];
+      if (!pRuntimeDlUrl)
+        throw new Error(`Could not download pruntime. Platform ${process.platform} not supported!`);
+      
+      await spinner.runCommand(
+        () => downlaodBinaryFile(projectPath, pherryDlUrl, spinner),
+        "Downloading pherry"
+      );
+      await spinner.runCommand(
+        () => downlaodBinaryFile(projectPath, pRuntimeDlUrl, spinner),
+        "Downloading pRuntime"
+      );
     }
 
-    console.log(projectPath)
     await spinner.runCommand(() => installDeps(projectPath), "Installing dependencies");
 
     const config: SwankyConfig = {

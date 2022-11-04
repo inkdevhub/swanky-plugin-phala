@@ -1,3 +1,4 @@
+import path = require("node:path");
 import { Command, Flags } from "@oclif/core";
 import execa from "execa";
 import { ensureSwankyProject, getSwankyConfig } from "@astar-network/swanky-core";
@@ -25,7 +26,9 @@ export class StartNode extends Command {
       stdio: "inherit",
     });
 
-    // TODO, phala requires pRuntime & pherry.
+    const binPath = path.dirname(config.node.localPath)
+    await execa.command(`${path.resolve(binPath, "pruntime")} -c 0`)
+    await execa.command(`${path.resolve(binPath, "pherry")} --dev --no-wait`)
 
     this.log("Node started");
   }
