@@ -1,5 +1,5 @@
 {
-  "name": "swanky-plugin-phala",
+  "name": "@astar-network/swanky-plugin-phala",
   "description": "Example plugin for swanky",
   "version": "0.2.0",
   "author": "Astar Network",
