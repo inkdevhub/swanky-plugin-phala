@@ -2,8 +2,6 @@ import { Command } from "@oclif/core";
 import {
   Spinner,
   downloadNode,
-  getSwankyConfig,
-  SwankyConfig,
 } from "@astar-network/swanky-core";
 import path = require("node:path");
 

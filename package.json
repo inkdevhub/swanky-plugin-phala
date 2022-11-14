@@ -3,9 +3,6 @@
   "description": "Example plugin for swanky",
   "version": "0.1.0",
   "author": "Astar Network",
-  "bin": {
-    "phala": "./bin/run"
-  },
   "dependencies": {
     "@astar-network/swanky-core": "1.0.0-alpha.6",
     "@oclif/core": "^1.19.1",
