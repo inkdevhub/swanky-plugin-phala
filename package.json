@@ -1,7 +1,7 @@
 {
   "name": "swanky-plugin-phala",
   "description": "Example plugin for swanky",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Astar Network",
   "bin": {
     "phala": "./bin/run"
