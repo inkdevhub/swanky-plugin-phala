@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@astar-network/swanky-core@1.0.0-alpha.4":
-  version "1.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@astar-network/swanky-core/-/swanky-core-1.0.0-alpha.4.tgz#60131161641835631d47e34213605af6acdcd528"
-  integrity sha512-UDa65lYbgJ2fP93FYajse7lYdzQYcqGlHRiegpMP8OeJZgxc9zCnW1EQOANLkNjl2EWMBhbE0MVcYAgh0i6xKA==
+"@astar-network/swanky-core@1.0.0-alpha.6":
+  version "1.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@astar-network/swanky-core/-/swanky-core-1.0.0-alpha.6.tgz#9b023b14bd506659397f5ac7b40f636a531e5b20"
+  integrity sha512-4lTLZlkum2qw7NJ0XKUcYrb5Q6HGw2jIgDouh675At7KheSZyl0EY3Sfqa/rJGaT8QpqmzrgTmYdDIHUR/ky2A==
   dependencies:
     "@polkadot/api" "^9.8.1"
     "@polkadot/api-contract" "^9.8.1"
@@ -16,6 +16,7 @@
     execa "5.1.1"
     fs-extra "^10.1.0"
     handlebars "^4.7.7"
+    node-downloader-helper "^2.1.4"
 
 "@babel/code-frame@7.12.11":
   version "7.12.11"
@@ -3664,6 +3665,11 @@ node-domexception@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
   integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
+
+node-downloader-helper@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/node-downloader-helper/-/node-downloader-helper-2.1.4.tgz#6e1d20ea0c7d0dfcfdf2a599dc389c33a322736a"
+  integrity sha512-Cbc5jwGTe58apFIPjxgcUzX0Se+pcUgdbym6G+sk2yb1m/qwxYTLmD4C2xEHTJO9YkZ/eRujMJPl3WW+7fVksQ==
 
 node-fetch@^2.6.7:
   version "2.6.7"
