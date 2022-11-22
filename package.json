@@ -1,14 +1,15 @@
 {
   "name": "@astar-network/swanky-plugin-phala",
-  "description": "Example plugin for swanky",
+  "description": "Phala plugin for swanky",
   "version": "0.2.0",
   "author": "Astar Network",
   "dependencies": {
-    "@astar-network/swanky-core": "1.0.0-alpha.6",
+    "@astar-network/swanky-core": "1.0.0-alpha.7",
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.4",
-    "decompress": "^4.2.1"
+    "decompress": "^4.2.1",
+    "devphase": "*"
   },
   "devDependencies": {
     "@oclif/test": "^2.2.4",
