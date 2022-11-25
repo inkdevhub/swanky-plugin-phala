@@ -5,9 +5,9 @@ import {
 } from "@astar-network/swanky-core";
 import path = require("node:path");
 
-export class Init extends Command {
+export class Node extends Command {
   async run(): Promise<void> {
-    const spinner = new Spinner();
+    const spinner = new Spinner(true);
     // const config = getSwankyConfig();
     const projectPath = path.resolve();
     const nodeInfo = {
@@ -15,10 +15,10 @@ export class Init extends Command {
       polkadotPalletVersions: "polkadot-v0.9.27",
       supportedInk: "v3.3.1",
       downloadUrl: {
-        darwin:
-          "https://github.com/Phala-Network/phala-blockchain/releases/download/poc2-3.0-alpha1/phala-node",
+        darwin: // no mac support, binary is not executable even if downloaded
+          "https://github.com/Phala-Network/phala-blockchain/releases/download/nightly-2022-11-24/phala-node",
         linux:
-          "https://github.com/Phala-Network/phala-blockchain/releases/download/poc2-3.0-alpha1/phala-node",
+          "https://github.com/Phala-Network/phala-blockchain/releases/download/nightly-2022-11-24/phala-node",
       },
     };
     const taskResult = (await spinner.runCommand(
