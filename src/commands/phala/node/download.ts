@@ -12,13 +12,13 @@ export class Node extends Command {
     const projectPath = path.resolve();
     const nodeInfo = {
       version: "0.10.0",
-      polkadotPalletVersions: "polkadot-v0.9.27",
-      supportedInk: "v3.3.1",
+      polkadotPalletVersions: "polkadot-v0.9.32",
+      supportedInk: "v3.4",
       downloadUrl: {
         darwin: // no mac support, binary is not executable even if downloaded
-          "https://github.com/Phala-Network/phala-blockchain/releases/download/nightly-2022-11-24/phala-node",
+          "https://github.com/Phala-Network/phala-blockchain/archive/refs/tags/nightly-2022-11-25.tar.gz",
         linux:
-          "https://github.com/Phala-Network/phala-blockchain/releases/download/nightly-2022-11-24/phala-node",
+          "https://github.com/Phala-Network/phala-blockchain/archive/refs/tags/nightly-2022-11-25.tar.gz",
       },
     };
     const taskResult = (await spinner.runCommand(
