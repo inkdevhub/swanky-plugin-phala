@@ -11,7 +11,7 @@
     "decompress": "^4.2.1"
   },
   "devDependencies": {
-    "@oclif/test": "^2.2.4",
+    "@oclif/test": "^2.2.12",
     "@types/chai": "^4",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.68",
