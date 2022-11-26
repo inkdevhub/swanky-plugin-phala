@@ -580,7 +580,7 @@
   dependencies:
     "@octokit/openapi-types" "^12.11.0"
 
-"@phala/sdk@^0.3.3", "@phala/sdk@^0.3.4":
+"@phala/sdk@^0.3.4":
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/@phala/sdk/-/sdk-0.3.4.tgz#0eba7aea05a9a88ed268e0557241e530d55b0abb"
   integrity sha512-2vaMqLEAus3vGOqG9jrZTvKvgCxDSllBsJOinOvO/GsMSSe+P+nkSxamqU546k41axzu1vXFavHK/scJiKp4Pw==
@@ -590,6 +590,22 @@
     "@polkadot/keyring" "^10.1.11"
     "@polkadot/util" "^10.1.11"
     "@polkadot/util-crypto" "^10.1.11"
+    "@polkadot/wasm-crypto" "6.3.1"
+    axios "^0.27.2"
+    crypto-browserify "^3.12.0"
+    protobufjs "^6.11.3"
+    rxjs "^7.5.7"
+
+"@phala/sdk@^0.3.5-beta.9":
+  version "0.3.5-beta.10"
+  resolved "https://registry.yarnpkg.com/@phala/sdk/-/sdk-0.3.5-beta.10.tgz#dc0f9c1491ed0c8af7c84790f5d0c458a047a84f"
+  integrity sha512-Yb5TVefd/Z38msZRWQ/lXMSkelCs0qk2lJMy1Q/kflc5k5eBAw3ZonFeVyutARZDFe52jHU5Or/eOiUB/9II2Q==
+  dependencies:
+    "@phala/typedefs" "^0.2.32"
+    "@polkadot/api" "^9.8.1"
+    "@polkadot/keyring" "^10.1.12"
+    "@polkadot/util" "^10.1.12"
+    "@polkadot/util-crypto" "^10.1.12"
     "@polkadot/wasm-crypto" "6.3.1"
     axios "^0.27.2"
     crypto-browserify "^3.12.0"
@@ -625,7 +641,7 @@
     "@polkadot/util" "^10.1.13"
     rxjs "^7.5.7"
 
-"@polkadot/api-contract@9.9.1", "@polkadot/api-contract@^9.6.1", "@polkadot/api-contract@^9.6.2":
+"@polkadot/api-contract@9.9.1", "@polkadot/api-contract@^9.6.1", "@polkadot/api-contract@^9.8.2":
   version "9.9.1"
   resolved "https://registry.yarnpkg.com/@polkadot/api-contract/-/api-contract-9.9.1.tgz#ffb45012289b9a97d4caab9c97551e3c5cd472b1"
   integrity sha512-2rpdgnkkmdL30r/AhEGIf9e699xYgXizbI8kngszvLOa3C3sNDzDsjF9FET7bGEPcQWMdl9WSuzM+bqXRhXiBw==
@@ -655,7 +671,7 @@
     "@polkadot/util-crypto" "^10.1.13"
     rxjs "^7.5.7"
 
-"@polkadot/api@9.9.1", "@polkadot/api@^9.6.1", "@polkadot/api@^9.6.2", "@polkadot/api@^9.7.1":
+"@polkadot/api@9.9.1", "@polkadot/api@^9.6.1", "@polkadot/api@^9.7.1", "@polkadot/api@^9.8.1":
   version "9.9.1"
   resolved "https://registry.yarnpkg.com/@polkadot/api/-/api-9.9.1.tgz#a8baf368fc57211acfd9ecf831b820272f8144d6"
   integrity sha512-3ltj6BbqEV9SCUlJIEmXWBmmQlZCvVPaj0N+99J9L2yiQ1E0KJsAizh10RxEjCvgYb2iWaE4ItPfhN0GxFJm7Q==
@@ -678,7 +694,7 @@
     eventemitter3 "^4.0.7"
     rxjs "^7.5.7"
 
-"@polkadot/keyring@10.1.13", "@polkadot/keyring@^10.1.11", "@polkadot/keyring@^10.1.13":
+"@polkadot/keyring@10.1.13", "@polkadot/keyring@^10.1.11", "@polkadot/keyring@^10.1.12", "@polkadot/keyring@^10.1.13":
   version "10.1.13"
   resolved "https://registry.yarnpkg.com/@polkadot/keyring/-/keyring-10.1.13.tgz#8d79983a23948b5fe666344578d8565bc675ee3e"
   integrity sha512-O5/sM1cfn/ueT7C6sxqZI9Z18RLOpPovdfZzBlcRAyfs/8uR+UA20r2lGCQdQIzlOeF0XPebIO0lwW+6wPtvtg==
@@ -818,7 +834,7 @@
     "@polkadot/util-crypto" "^10.1.13"
     rxjs "^7.5.7"
 
-"@polkadot/util-crypto@10.1.13", "@polkadot/util-crypto@^10.1.11", "@polkadot/util-crypto@^10.1.13":
+"@polkadot/util-crypto@10.1.13", "@polkadot/util-crypto@^10.1.11", "@polkadot/util-crypto@^10.1.12", "@polkadot/util-crypto@^10.1.13":
   version "10.1.13"
   resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-10.1.13.tgz#5982b98bd4ac22b65c2b655da54cdaddc56332c5"
   integrity sha512-LYHsJM8hzsvehO2T1S5vMFX7k2gCt/QnG3NzSGo+97OauitrICN8V7py4o5TOewUzMeihNMVKjRkj/cC4e+i4Q==
@@ -852,7 +868,7 @@
     ed2curve "^0.3.0"
     tweetnacl "^1.0.3"
 
-"@polkadot/util@10.1.13", "@polkadot/util@^10.1.11", "@polkadot/util@^10.1.13":
+"@polkadot/util@10.1.13", "@polkadot/util@^10.1.11", "@polkadot/util@^10.1.12", "@polkadot/util@^10.1.13":
   version "10.1.13"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-10.1.13.tgz#727146248f6b5d8f35740a394d209a37284d08ac"
   integrity sha512-wedd6NKIA1gKUm21SFwsq8UzQrMAzc2fBjrfD07LIXEJ2S/q5IKF57NjGMzf6fdNFt0376VNLUGD4MbxSc9/HA==
@@ -2477,16 +2493,14 @@ detect-indent@^6.0.0:
   resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-6.1.0.tgz#592485ebbbf6b3b1ab2be175c8393d04ca0d57e6"
   integrity sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==
 
-devphase@*:
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/devphase/-/devphase-0.0.16.tgz#e4df2fe71a08b5c6c995b6004c02d8a866d9b982"
-  integrity sha512-jikaavmSWp6BeJAarKd6y22O7McQCH0iYeu8jNJy3Fnlq5es2AsQfQLUSNG9c6E2wudL5dMRXKjwRdluDLfo5g==
+devphase@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/devphase/-/devphase-0.0.24.tgz#9da04b4665d7005fdd73f50b4a2bd626bb7447d1"
+  integrity sha512-40xnYY7HkzKYyQ6E/ouVNQuUYT5QZJZQdHAy+DwQGErcj44wKPF2ivlMCWRq2Xr/yAnB7NEOK1sf8eeqRnFXuQ==
   dependencies:
-    "@phala/sdk" "^0.3.3"
+    "@phala/sdk" "^0.3.5-beta.9"
     "@phala/typedefs" "^0.2.32"
-    "@polkadot/api" "^9.6.2"
-    "@polkadot/api-contract" "^9.6.2"
-    "@polkadot/keyring" "^10.1.11"
+    "@polkadot/api-contract" "^9.8.2"
     "@types/chai" "^4.3.3"
     "@types/mocha" "^10.0.0"
     axios "^0.27.2"

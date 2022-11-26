@@ -1,63 +1,107 @@
 import { ProjectConfigOptions } from 'devphase';
-const Phala = require('@phala/sdk');
+import { join } from 'path';
+import { spawn } from 'child_process';
+import * as fs from 'fs';
+
+function rel(p: string): string {
+  return join(process.cwd(), p);
+}
+
+async function initChain(devphase: any): Promise<void> {
+  console.log('######################## Initializing blockchain ########################');
+  // Necessary to run; copied from devphase `defaultSetupenv()`
+  devphase.mainClusterId = devphase.options.clusterId;
+  // Run our custom init script
+  return new Promise((resolve) => {
+    const init = spawn(
+      'node',
+      ['src/setup-drivers.js'],
+      {
+        stdio: 'inherit',
+        cwd: '../tmp/setup',
+        env: {
+          'ENDPOINT': devphase.options.nodeUrl,
+          'WORKERS': devphase.options.workerUrl,
+          'GKS': devphase.options.workerUrl,
+        },
+      },
+    );
+    // function onData(data: Buffer) {
+    //     console.log('[INIT]', data.toString());
+    // }
+    // init.stdout.on('data', onData);
+    // init.stderr.on('data', onData);
+    init.on('exit', code => {
+      console.log('initChain script exited with code', code);
+      resolve();
+    });
+  });
+}
+
+async function saveLog(devphase: any, outPath): Promise<void> {
+  console.log('######################## Saving worker logs ########################');
+  const logging = fs.createWriteStream(outPath, { flags: 'w'});
+  await new Promise((resolve: (_: void) => void) => {
+    const readLog = spawn(
+      'node', ['src/read-log.js'],
+      {
+        // stdio: 'inherit',
+        cwd: '../tmp/setup',
+        env: {
+          'ENDPOINT': devphase.options.nodeUrl,
+          'WORKERS': devphase.options.workerUrl,
+          'CLUSTER': devphase.options.clusterId,
+        }
+      }
+    );
+    readLog.stdout.pipe(logging);
+    readLog.stderr.pipe(logging);
+    readLog.on('exit', code => {
+      console.log('saveLog script exited with code', code);
+      resolve();
+    });
+  });
+}
 
 const config : ProjectConfigOptions = {
-  // project directories
-  directories: {
-    artifacts: 'artifacts',
-    contracts: 'contracts',
-    logs: 'logs',
-    stack: 'stack',
-    tests: 'tests',
-    typings: 'typings'
-  },
-  /*
-   * Stack configuration
-   * {
-   *     [componentName : string]: {
-   *          binary: string, // path to binary
-   *          workingDir: string, // working directory as above
-   *          evns: {
-   *              [name: string]: string,
-   *          },
-   *          args: {
-   *              [name: string]: string,
-   *          },
-   *          timeout: number // start up timeout
-   *     }
-   * }
-   */
   stack: {
-    version: 'nightly-2022-11-24', // version which you want to pull from official repository (tag name) or "latest" one
+    blockTime: 500,
+    version: 'nightly-2022-11-24',
     node: {
-      port: 9944, // ws port
-      binary: '{{directories.stack}}/{{stack.version}}/phala-node',
-      workingDir: '{{directories.stack}}/.data/node',
+      port: 39944,
+      binary: '{{directories.stacks}}/{{stack.version}}/phala-node',
+      workingDir: '{{directories.stacks}}/.data/node',
       envs: {},
       args: {
         '--dev': true,
+        '--port': 33333,
+        '--ws-port': '{{stack.node.port}}',
+        '--ws-external': true,
+        '--unsafe-ws-external': true,
         '--rpc-methods': 'Unsafe',
-        '--block-millisecs': 6000,
-        '--ws-port': '{{stack.port.port}}'
+        '--block-millisecs': '{{stack.blockTime}}',
       },
       timeout: 10000,
     },
     pruntime: {
-      port: 8000, // server port
-      binary: '{{directories.stack}}/{{stack.version}}/pruntime',
-      workingDir: '{{directories.stack}}/.data/pruntime',
-      envs: {},
+      port: 38000, // server port
+      binary: '{{directories.stacks}}/{{stack.version}}/pruntime',
+      workingDir: '{{directories.stacks}}/.data/pruntime',
+      envs: {
+        'RUST_LOG': 'debug,runtime=trace'
+      },
       args: {
         '--allow-cors': true,
         '--cores': 0,
-        '--port': '{{stack.pruntime.port}}'
+        '--address': '0.0.0.0',
+        '--port': '{{stack.pruntime.port}}',
       },
       timeout: 2000,
     },
     pherry: {
-      gkMnemonic: '//Alice', // gate keeper mnemonic
-      binary: '{{directories.stack}}/{{stack.version}}/pherry',
-      workingDir: '{{directories.stack}}/.data/pherry',
+      gkMnemonic: '//Ferdie', // super user mnemonic
+      binary: '{{directories.stacks}}/{{stack.version}}/pherry',
+      workingDir: '{{directories.stacks}}/.data/pherry',
       envs: {},
       args: {
         '--no-wait': true,
@@ -65,9 +109,10 @@ const config : ProjectConfigOptions = {
         '--inject-key': '0000000000000000000000000000000000000000000000000000000000000001',
         '--substrate-ws-endpoint': 'ws://localhost:{{stack.node.port}}',
         '--pruntime-endpoint': 'http://localhost:{{stack.pruntime.port}}',
-        '--dev-wait-block-ms': 1000,
+        '--dev-wait-block-ms': '{{stack.blockTime}}',
+        '--attestation-provider': 'none',
       },
-      timeout: 2000,
+      timeout: 5000,
     }
   },
   /**
@@ -75,11 +120,6 @@ const config : ProjectConfigOptions = {
    */
   devPhaseOptions: {
     nodeUrl: 'ws://localhost:{{stack.node.port}}',
-    nodeApiOptions: {
-      types: {
-        ...Phala.types,
-      }
-    },
     workerUrl: 'http://localhost:{{stack.pruntime.port}}',
     accountsMnemonic: '', // default account
     accountsPaths: {
@@ -92,27 +132,29 @@ const config : ProjectConfigOptions = {
     },
     sudoAccount: 'alice',
     ss58Prefix: 30,
-    clusterId: undefined, // if specified - it will be used as default cluster for deployments
+    clusterId: '0x0000000000000000000000000000000000000000000000000000000000000000',
   },
   /**
    * Testing configuration
    */
   testing: {
     mocha: {}, // custom mocha configuration
-    spawnStack: true, // spawn runtime stack? or assume there is running one
-    stackLogOutput: false, // if specifed pipes output of all stack component to file (by default it is ignored)
-    blockTime: 100, // overrides block time specified in node (and pherry) component
     envSetup: { // environment setup
       setup: {
-        custom: undefined, // custom setup procedure callback; (devPhase) => Promise<void>
-        timeout: 60 * 1000,
+        // custom setup procedure callback; (devPhase) => Promise<void>
+        custom: initChain,
+        timeout: 120 * 1000,
       },
       teardown: {
-        custom: undefined, // custom teardown procedure callback ; (devPhase) => Promise<void>
+        // custom teardown procedure callback ; (devPhase) => Promise<void>
+        custom: devphase =>
+          saveLog(devphase, `${devphase.runtimeContext.paths.currentLog}/worker.log`),
         timeout: 10 * 1000,
       }
     },
-  }
+    blockTime: 500, // overrides block time specified in node (and pherry) component
+    stackLogOutput : true, // if specifed pipes output of all stack component to file (by default it is ignored)
+  },
 };
 
 export default config;

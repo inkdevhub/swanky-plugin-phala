@@ -10,7 +10,7 @@
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.4",
     "decompress": "^4.2.1",
-    "devphase": "*"
+    "devphase": "^0.0.24"
   },
   "devDependencies": {
     "@oclif/test": "^2.2.4",
