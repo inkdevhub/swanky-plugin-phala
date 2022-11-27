@@ -1,23 +1,128 @@
-import {Command} from '@oclif/core'
+import {Command, Flags} from '@oclif/core'
+import {
+  copyTemplateFiles,
+  processTemplates,
+  Spinner,
+} from "@astar-network/swanky-core";
+import { paramCase, pascalCase, snakeCase } from "change-case";
+import inquirer from 'inquirer';
+
+import { choice, email, name, pickLanguage, pickTemplate } from "../../lib/prompts";
 import execa from 'execa'
 import path = require("node:path")
+import { readdirSync } from "node:fs";
+
+export function getTemplates(language = "pink") {
+  const templatesPath = path.resolve(__dirname, "../..", "templates");
+  const contractTemplatesPath = path.resolve(templatesPath, "contracts", language);
+  const fileList = readdirSync(contractTemplatesPath, {
+    withFileTypes: true,
+  });
+  const contractTemplatesList = fileList
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => ({
+      message: entry.name,
+      value: entry.name,
+    }));
+
+  return { templatesPath, contractTemplatesPath, contractTemplatesList };
+}
 
 export default class PhalaInit extends Command {
-  static description = 'Init project (creates required files and directories)'
+  static description = 'Generate a new Phat Contract environment'
 
   static examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
 
+  static flags = {
+    "phala-node": Flags.boolean(),
+    template: Flags.string({
+      options: getTemplates().contractTemplatesList.map((template) => template.value),
+    }),
+    verbose: Flags.boolean({ char: "v" }),
+  };
+
+  static args = [
+    {
+      name: "projectName",
+      required: true,
+      description: "directory name of new project",
+    },
+  ];
+
   public async run(): Promise<void> {
+    const { args, flags } = await this.parse(PhalaInit);
+
+    const projectPath = path.resolve(args.projectName);
+
+    const { contractLanguage } = await inquirer.prompt([pickLanguage()]);
+
+    const templates = getTemplates();
+
+    const questions = [
+      pickTemplate(templates.contractTemplatesList),
+      name("contract", (ans) => ans.contractTemplate, "What should we name your contract?"),
+      name(
+        "author",
+        () => execa.commandSync("git config --get user.name").stdout,
+        "What is your name?"
+      ),
+      email(),
+    ];
+
+    if (!flags["phala-node"]) {
+      questions.push(choice("usePhalaNode", "Do you want to download Phala node components for local testnet?"));
+    }
+
+    const answers = await inquirer.prompt(questions);
+
+    const spinner = new Spinner(flags.verbose);
     this.log(`Initializing`)
 
-    const projectPath = path.resolve()
-    const devphasePath = path.resolve(projectPath, "devphase")
+    await spinner.runCommand(
+      () =>
+        copyTemplateFiles(
+          templates.templatesPath,
+          path.resolve(templates.contractTemplatesPath, answers.contractTemplate),
+          answers.contractName,
+          projectPath
+        ),
+      "Copying template files"
+    );
 
-    await execa.command(`yarn install`, { cwd: devphasePath })
-    await execa.command(`yarn compile`, { cwd: devphasePath })
+    await spinner.runCommand(
+      () =>
+        processTemplates(projectPath, {
+          project_name: paramCase(args.projectName),
+          author_name: answers.authorName,
+          author_email: answers.email,
+          swanky_version: this.config.pjson.version,
+          contract_name: answers.contractName,
+          contract_name_snake: snakeCase(answers.contractName),
+          contract_name_pascal: pascalCase(answers.contractName),
+          contract_language: contractLanguage,
+        }),
+      "Processing templates"
+    );
 
-    await execa.command(`yarn devphase init`, { cwd: projectPath })
+    await spinner.runCommand(
+      () => execa.command("git init", { cwd: projectPath }),
+      "Initializing git"
+    );
+
+    if (flags["phala-node"] || answers.usePhalaNode) {
+      const basePath = path.resolve();
+      await spinner.runCommand(
+        () => execa.command(`yarn install`, { cwd: projectPath }),
+        "Setting up repo..."
+      );
+      await spinner.runCommand(
+        () => execa.command(`yarn devphase init`, { cwd: projectPath }),
+        "Downloading Phala binaries for local testnet...");
+    }
+
+    this.log("Phat Contract project successfully initialised!");
+
   }
 }
