@@ -7,7 +7,7 @@
     "phala": "./bin/run"
   },
   "dependencies": {
-    "@astar-network/swanky-core": "1.0.0-beta.8",
+    "@astar-network/swanky-core": "1.0.0-rc.4",
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.4",
