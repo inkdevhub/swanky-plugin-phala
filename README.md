@@ -17,8 +17,10 @@ Clone this repo, run `yarn install` then run `yarn build`, and link it to swanky
 ```
 swanky plugins:install [PATH_TO_REPO]
 ```
+
 > **NOTE** This does not work currently. Use dev commands instead by executing `./bin/dev phala [command]` instead.
 > 
+
 Now you can run `swanky phala init`
 
 ## swanky-core
@@ -175,6 +177,37 @@ DESCRIPTION
 EXAMPLES
   $ phala phala test
 ```
+USAGE
+  $ phala phala init [PROJECTNAME]
+
+FLAGS
+  -v, --verbose
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ phala phala init my_new_project
+```
+
+## `phala phala stack`
+
+Starting local stack (node + pruntime + pherry)
+
+```
+USAGE
+  $ phala phala stack
+
+DESCRIPTION
+  Starting local stack (node + pruntime + pherry)
+
+EXAMPLES
+  $ phala phala stack
+```
+
+## `phala phala stack-setup [FILE]`
+
+TODO
 
 ## `phala phala typings [CONTRACTNAME]`
 

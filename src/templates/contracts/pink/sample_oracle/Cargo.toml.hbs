@@ -38,6 +38,7 @@ phat_offchain_rollup = { path = "../../crates/rollup", features = ["logging"] }
 [lib]
 name = "{{contract_name_snake}}"
 path = "src/lib.rs"
+
 crate-type = [
 	# Used for normal contract Wasm blobs.
 	"cdylib",
