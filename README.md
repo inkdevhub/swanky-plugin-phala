@@ -9,14 +9,17 @@ When called, it downloads phala-node from https://github.com/Phala-Network/phala
 Install swanky-cli globally:
 
 ```
-npm i -g @astar-network/swanky-cli@1.0.0-alpha.7
+npm i -g @astar-network/swanky-cli
 ```
 
-Clone this repo, run `yarn build`, and link it to swanky-cli:
+Clone this repo, run `yarn install` then run `yarn build`, and link it to swanky-cli:
 
 ```
 swanky plugins:install [PATH_TO_REPO]
 ```
+
+> **NOTE** This does not work currently. Use dev commands instead by executing `./bin/dev phala [command]` instead.
+> 
 
 Now you can run `swanky phala init`
 
@@ -62,13 +65,13 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`phala help [COMMAND]`](#phala-help-command)
+* [`phala --help [COMMAND]`](#phala-help-command)
 * [`phala phala compile [CONTRACTNAME]`](#phala-phala-compile-contractname)
-* [`phala phala INIT [PROJECTNAME]`](#phala-phala-compile-projectname)
+* [`phala phala init [PROJECTNAME]`](#phala-phala-compile-projectname)
 * [`phala phala stack`](#phala-phala-stack)
-* [`phala phala stack-setup [FILE]`](#phala-phala-stack-setup-file)
+* [`phala phala stack-setup`](#phala-phala-stack-setup-file)
 * [`phala phala test [FILE]`](#phala-phala-test-file)
-* [`phala phala typings [FILE]`](#phala-phala-typings-file)
+* [`phala phala typings [CONTRACTNAME]`](#phala-phala-typings-file)
 
 ## `phala help [COMMAND]`
 
@@ -76,7 +79,7 @@ Display help for phala.
 
 ```
 USAGE
-  $ phala help [COMMAND] [-n]
+  $ phala --help [COMMAND] [-n]
 
 ARGUMENTS
   COMMAND  Command to show help for.
@@ -92,7 +95,7 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.1
 
 ## `phala phala compile [CONTRACTNAME]`
 
-TODO
+Compile Phala Phat Contract
 
 ```
 USAGE
@@ -103,7 +106,7 @@ FLAGS
   -w, --name=<value>  watch for changes
 
 DESCRIPTION
-  TODO
+  Compile Contract
 
 EXAMPLES
   $ phala phala compile
@@ -112,6 +115,67 @@ EXAMPLES
 
 Generate a new Phat Contract environment and download local testnet binares.
 
+```
+USAGE
+  $ phala phala init [PROJECTDIR]
+
+FLAGS
+  -v, --verbose
+
+DESCRIPTION
+  Generate a new Phat Contract environment
+
+EXAMPLES
+  $ phala phala init my_new_project
+```
+
+## `phala phala stack`
+
+Starting local stack (node + pruntime + pherry)
+
+```
+USAGE
+  $ phala phala stack
+
+DESCRIPTION
+  Starting local stack (node + pruntime + pherry)
+
+EXAMPLES
+  $ phala phala stack
+```
+
+## `phala phala stack-setup`
+
+Configuring the local testnet
+
+```
+USAGE
+  $ phala phala stack-setup
+
+DESCRIPTION
+  Configuring the local testnet
+
+EXAMPLES
+  $ phala phala stack-setup
+```
+
+## `phala phala test [FILE]`
+
+TODO
+
+```
+USAGE
+  $ phala phala test [FILE] [-n <value>] [-f]
+
+FLAGS
+  -f, --force
+  -n, --name=<value>  name to print
+
+DESCRIPTION
+  TODO
+
+EXAMPLES
+  $ phala phala test
 ```
 USAGE
   $ phala phala init [PROJECTNAME]
@@ -145,54 +209,19 @@ EXAMPLES
 
 TODO
 
-```
-USAGE
-  $ phala phala stack-setup [FILE] [-n <value>] [-f]
+## `phala phala typings [CONTRACTNAME]`
 
-FLAGS
-  -f, --force
-  -n, --name=<value>  name to print
-
-DESCRIPTION
-  TODO
-
-EXAMPLES
-  $ phala phala stack-setup
-```
-
-## `phala phala test [FILE]`
-
-TODO
+Typings for the Phat Contract
 
 ```
 USAGE
-  $ phala phala test [FILE] [-n <value>] [-f]
+  $ phala phala typings [CONTRACTNAME] -w
 
 FLAGS
-  -f, --force
-  -n, --name=<value>  name to print
+  -w, --watch
 
 DESCRIPTION
-  TODO
-
-EXAMPLES
-  $ phala phala test
-```
-
-## `phala phala typings [FILE]`
-
-TODO
-
-```
-USAGE
-  $ phala phala typings [FILE] [-n <value>] [-f]
-
-FLAGS
-  -f, --force
-  -n, --name=<value>  name to print
-
-DESCRIPTION
-  TODO
+  Typings
 
 EXAMPLES
   $ phala phala typings

@@ -32,7 +32,7 @@ export default class PhalaInit extends Command {
   static description = 'Generate a new Phat Contract environment'
 
   static examples = [
-    '<%= config.bin %> <%= command.id %>',
+    '<%= config.bin %> <%= command.id %> [projectName]',
   ]
 
   static flags = {
@@ -123,6 +123,5 @@ export default class PhalaInit extends Command {
     }
 
     this.log("Phat Contract project successfully initialised!");
-
   }
 }

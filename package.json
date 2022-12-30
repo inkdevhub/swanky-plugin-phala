@@ -14,7 +14,7 @@
     "@phala/sdk": "^0.3.4",
     "change-case": "^4.1.2",
     "decompress": "^4.2.1",
-    "devphase": "^0.0.25",
+    "devphase": "^0.0.30",
     "inquirer": "^8.0.0"
   },
   "devDependencies": {
@@ -67,7 +67,8 @@
     }
   },
   "scripts": {
-    "build": "shx rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc -b",
+    "build": "shx rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc -b && yarn copy-templates",
+    "copy-templates": "shx cp -R src/templates dist/",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
