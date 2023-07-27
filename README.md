@@ -1,3 +1,4 @@
+# **This repo is currently being maintained [here](https://github.com/Phala-Network/swanky-plugin-phala)**
 # swanky-plugin-phala
 
 This is an example plugin for swanky-cli, meant to demonstrate how to build one.
